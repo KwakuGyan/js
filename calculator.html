@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Grading system</title>
+  </head>
+  <Body>
+    <div id="root"></div>
+    <script type="text/babel">
+      // Your React code here
+      function Student(props){
+        function getGrade(score){
+          if(score >= 90) return 'A';
+          if(score >= 80) return 'B';
+          if(score >= 70) return 'C';
+          if(score >= 60) return 'D';
+          return 'F';
+        }
+        return(
+            <div ClassName={`card ${props.rank===1 ? "winner" : ""}`}>
+                <h3>
+                    {props.rank===1 && "🥇"}
+                    {props.rank===2 && "🥈"}
+                    {props.rank===3 && "🥉"}
+                    {props.name}
+                </h3>
+                <p>Score: {props.score}</p>
+                <p>Grade: {getGrade(props.score)}</p>
+                <button onClick={() => props.deleteStudent(props.id)}>Delete</button>
+            </div>
+        )
+      }
+    </script>
+  </Body>
+</html>
