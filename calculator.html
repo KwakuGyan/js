@@ -1,34 +1,342 @@
 <!DOCTYPE HTML>
 <html>
-  <head>
-    <title>Grading system</title>
-  </head>
-  <Body>
-    <div id="root"></div>
-    <script type="text/babel">
-      // Your React code here
-      function Student(props){
-        function getGrade(score){
-          if(score >= 90) return 'A';
-          if(score >= 80) return 'B';
-          if(score >= 70) return 'C';
-          if(score >= 60) return 'D';
-          return 'F';
-        }
-        return(
-            <div ClassName={`card ${props.rank===1 ? "winner" : ""}`}>
-                <h3>
-                    {props.rank===1 && "🥇"}
-                    {props.rank===2 && "🥈"}
-                    {props.rank===3 && "🥉"}
-                    {props.name}
-                </h3>
-                <p>Score: {props.score}</p>
-                <p>Grade: {getGrade(props.score)}</p>
-                <button onClick={() => props.deleteStudent(props.id)}>Delete</button>
-            </div>
-        )
-      }
-    </script>
-  </Body>
+
+<head>
+<title>Grading System</title>
+
+<style>
+.card{
+  border:1px solid black;
+  padding:15px;
+  margin:10px;
+  border-radius:10px;
+}
+
+.winner{
+  background:gold;
+}
+
+button{
+  padding:8px;
+  margin:5px;
+  cursor:pointer;
+}
+
+input{
+  padding:8px;
+  margin:5px;
+}
+
+</style>
+
+
+<!-- React Links -->
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+
+</head>
+
+
+<body>
+
+
+<div id="root"></div>
+
+
+<script type="text/babel">
+
+
+function Student(props){
+
+
+function getGrade(score){
+
+if(score >= 90) return "A";
+if(score >= 80) return "B";
+if(score >= 70) return "C";
+if(score >= 60) return "D";
+
+return "F";
+
+}
+
+
+
+return(
+
+<div className={`card ${props.rank===1 ? "winner":""}`}>
+
+<h3>
+
+{props.rank===1 && "🥇"}
+{props.rank===2 && "🥈"}
+{props.rank===3 && "🥉"}
+
+{props.name}
+
+</h3>
+
+
+<p>
+Score: {props.score}
+</p>
+
+
+<p>
+Grade: {getGrade(props.score)}
+</p>
+
+
+<button onClick={()=>props.deleteStudent(props.id)}>
+Delete
+</button>
+
+
+</div>
+
+);
+
+
+}
+
+
+
+
+
+function App(){
+
+
+const [students,setStudents] = React.useState([
+
+{id:1,name:"Alice",score:95},
+{id:2,name:"Bob",score:85},
+{id:3,name:"Charlie",score:75}
+
+]);
+
+
+
+const [name,setName] = React.useState("");
+
+const [score,setScore] = React.useState("");
+
+const [search,setSearch] = React.useState("");
+
+
+
+
+
+function addStudent(){
+
+
+if(name==="" || score==="")
+return;
+
+
+
+const newStudent={
+
+id:Date.now(),
+
+name:name,
+
+score:Number(score)
+
+};
+
+
+
+setStudents([...students,newStudent]);
+
+
+setName("");
+
+setScore("");
+
+
+}
+
+
+
+
+
+
+function deleteStudent(id){
+
+
+setStudents(
+
+students.filter(student=>student.id !== id)
+
+);
+
+
+}
+
+
+
+
+
+
+const sortedStudents=[...students]
+
+.sort((a,b)=>b.score-a.score);
+
+
+
+
+const filteredStudents = sortedStudents.filter(student=>
+
+student.name.toLowerCase()
+
+.includes(search.toLowerCase())
+
+);
+
+
+
+
+
+
+
+return(
+
+<div>
+
+
+<h1>
+Student Grading System
+</h1>
+
+
+<h3>
+{new Date().toLocaleDateString()}
+</h3>
+
+
+
+
+<input
+
+type="text"
+
+placeholder="Search student"
+
+value={search}
+
+onChange={(e)=>setSearch(e.target.value)}
+
+/>
+
+
+
+<br/>
+
+
+
+
+<input
+
+type="text"
+
+placeholder="Student Name"
+
+value={name}
+
+onChange={(e)=>setName(e.target.value)}
+
+/>
+
+
+
+<input
+
+type="number"
+
+placeholder="Score"
+
+value={score}
+
+onChange={(e)=>setScore(e.target.value)}
+
+/>
+
+
+
+<button onClick={addStudent}>
+Add Student
+</button>
+
+
+
+
+
+<h2>
+Total Students: {students.length}
+</h2>
+
+
+
+
+
+{
+
+filteredStudents.map((student,index)=>(
+
+
+<Student
+
+key={student.id}
+
+id={student.id}
+
+name={student.name}
+
+score={student.score}
+
+rank={index+1}
+
+deleteStudent={deleteStudent}
+
+/>
+
+
+))
+
+
+}
+
+
+
+</div>
+
+);
+
+
+
+}
+
+
+
+
+
+
+
+ReactDOM.createRoot(
+
+document.getElementById("root")
+
+)
+
+.render(<App/>);
+
+
+
+</script>
+
+
+</body>
+
 </html>
